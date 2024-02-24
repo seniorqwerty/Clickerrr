@@ -1,136 +1,90 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clicker Game</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Кликер</title>
+  <link rel="stylesheet" href="style.css">
     <style>
-      /* styles.css */
-body {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    background-color: #f0f0f0;
-    font-family: Arial, sans-serif;
+        body {
+  font-family: sans-serif;
+  margin: 20px;
 }
 
-#game-container {
-    text-align: center;
+#app {
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-#coin-counter {
-    font-size: 3rem;
+#game-area {
+  border: 1px solid #ccc;
+  padding: 20px;
 }
 
-#clickable-image {
-    width: 200px;
-    cursor: pointer;
+#clicker-button {
+  font-size: 18px;
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-#sidebar {
-    border-left: 1px solid #ccc;
+#coins-count {
+  font-size: 24px;
+  margin-top: 10px;
 }
 
-#statistics, #tasks {
-    margin: 1rem 0;
+#boost-area, #stats-area {
+  border: 1px solid #ccc;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+#boost-area h2, #stats-area h2 {
+  margin-top: 0;
+}
+
+#boosts-list, #leaderboard {
+  list-style: none;
+  padding: 0;
+}
+
+#boosts-list li, #leaderboard li {
+  padding: 5px;
+  border-bottom: 1px solid #ccc;
+}
+
+#leaderboard li {
+  display: flex;
+  align-items: center;
+}
+
+#leaderboard img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
 }
     </style>
 </head>
 <body>
-    <div id="game-container">
-        <h1 id="coin-counter">0</h1>
-        <img id="clickable-image" src="your-image-url.png" alt="Clickable Image">
+  <div id="app">
+    <h1>Кликер</h1>
+    <div id="game-area">
+      <button id="clicker-button">Нажми!</button>
+      <p id="coins-count">0 монет</p>
     </div>
-    <div id="sidebar">
-        <button id="buy-booster">Buy Booster</button>
-        <div id="statistics">Statistics</div>
-        <div id="tasks">Tasks</div>
-        <button id="leaderboard-button">Leaderboard</button>
+    <div id="boost-area">
+      <h2>Бусты</h2>
+      <ul id="boosts-list"></ul>
     </div>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    <script>
-      // script.js
-const firebaseConfig = {
-  apiKey: "AIzaSyBhBIEBOFTtlccPQmpBIIL5G8HjgIUraEo",
-  authDomain: "grishinium-d8d99.firebaseapp.com",
-  projectId: "grishinium-d8d99",
-  storageBucket: "grishinium-d8d99.appspot.com",
-  messagingSenderId: "894232638590",
-  appId: "1:894232638590:web:d8ed7ab3a5bdb1af78142f",
-  measurementId: "G-VKYRFZ5MP6"
-};
-
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-
-const coinCounter = document.getElementById("coin-counter");
-const clickableImage = document.getElementById("clickable-image");
-
-let coins = 0;
-
-clickableImage.addEventListener("click", () => {
-  coins++;
-  coinCounter.innerText = coins;
-  db.ref("coins").set(coins);
-});
-
-db.ref("coins").on("value", (snapshot) => {
-  coins = snapshot.val();
-  coinCounter.innerText = coins;
-});
-    </script>
-    <script>
-      function activateBooster() {
-  const boosterInterval = setInterval(() => {
-    coins++;
-    coinCounter.innerText = coins;
-    db.ref("coins").set(coins);
-  }, 1000);
-
-  return boosterInterval;
-}
-    </script>
-    <script>
-      function deactivateBooster(boosterInterval) {
-  clearInterval(boosterInterval);
-}
-    </script>
-    <script>
-      function buyBooster() {
-  const boosterCost = 10;
-
-  if (coins >= boosterCost) {
-    coins -= boosterCost;
-    coinCounter.innerText = coins;
-    db.ref("coins").set(coins);
-
-    const boosterInterval = activateBooster();
-
-    setTimeout(() => {
-      deactivateBooster(boosterInterval);
-    }, 60000); // 1 минута
-  }
-}
-    </script>
-    <script>
-      const buyBoosterButton = document.getElementById("buy-booster");
-
-buyBoosterButton.addEventListener("click", buyBooster);
-    </script>
-    <script>
-        const leaderboardButton = document.getElementById("leaderboard-button");
-leaderboardButton.addEventListener("click", () => {
-  window.open("leaderboard.html", "_blank");
-});
-    </script>
-    <script>
-        window.onload = () => {
-  displayLeaderboard();
-};
-    </script>
+    <div id="stats-area">
+      <h2>Статистика</h2>
+      <ul id="leaderboard"></ul>
+    </div>
+  </div>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
