@@ -18,7 +18,7 @@ const boostsRef = firebase.database().ref("boosts");
 const leaderboardRef = firebase.database().ref("leaderboard");
 
 // Telegram Bot API token
-const botToken = "YOUR_BOT_TOKEN";
+const botToken = "6924699413:AAHjdrI9geB3igU7O-lqpIHjUe8fTlcNqOw";
 
 // Get user info from Telegram
 const getTelegramUserInfo = async (userId) => {
