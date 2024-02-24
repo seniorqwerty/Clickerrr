@@ -48,6 +48,7 @@ body {
         <button id="buy-booster">Buy Booster</button>
         <div id="statistics">Statistics</div>
         <div id="tasks">Tasks</div>
+        <button id="leaderboard-button">Leaderboard</button>
     </div>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
@@ -119,6 +120,17 @@ db.ref("coins").on("value", (snapshot) => {
       const buyBoosterButton = document.getElementById("buy-booster");
 
 buyBoosterButton.addEventListener("click", buyBooster);
+    </script>
+    <script>
+        const leaderboardButton = document.getElementById("leaderboard-button");
+leaderboardButton.addEventListener("click", () => {
+  window.open("leaderboard.html", "_blank");
+});
+    </script>
+    <script>
+        window.onload = () => {
+  displayLeaderboard();
+};
     </script>
 </body>
 </html>
