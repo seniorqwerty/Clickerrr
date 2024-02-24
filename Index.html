@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clicker Game</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+      /* styles.css */
+body {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+}
+
+#game-container {
+    text-align: center;
+}
+
+#coin-counter {
+    font-size: 3rem;
+}
+
+#clickable-image {
+    width: 200px;
+    cursor: pointer;
+}
+
+#sidebar {
+    border-left: 1px solid #ccc;
+}
+
+#statistics, #tasks {
+    margin: 1rem 0;
+}
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <h1 id="coin-counter">0</h1>
+        <img id="clickable-image" src="your-image-url.png" alt="Clickable Image">
+    </div>
+    <div id="sidebar">
+        <button id="buy-booster">Buy Booster</button>
+        <div id="statistics">Statistics</div>
+        <div id="tasks">Tasks</div>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script>
+      // script.js
+const firebaseConfig = {
+  apiKey: "AIzaSyBhBIEBOFTtlccPQmpBIIL5G8HjgIUraEo",
+  authDomain: "grishinium-d8d99.firebaseapp.com",
+  projectId: "grishinium-d8d99",
+  storageBucket: "grishinium-d8d99.appspot.com",
+  messagingSenderId: "894232638590",
+  appId: "1:894232638590:web:d8ed7ab3a5bdb1af78142f",
+  measurementId: "G-VKYRFZ5MP6"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+const coinCounter = document.getElementById("coin-counter");
+const clickableImage = document.getElementById("clickable-image");
+
+let coins = 0;
+
+clickableImage.addEventListener("click", () => {
+  coins++;
+  coinCounter.innerText = coins;
+  db.ref("coins").set(coins);
+});
+
+db.ref("coins").on("value", (snapshot) => {
+  coins = snapshot.val();
+  coinCounter.innerText = coins;
+});
+    </script>
+    <script>
+      function activateBooster() {
+  const boosterInterval = setInterval(() => {
+    coins++;
+    coinCounter.innerText = coins;
+    db.ref("coins").set(coins);
+  }, 1000);
+
+  return boosterInterval;
+}
+    </script>
+    <script>
+      function deactivateBooster(boosterInterval) {
+  clearInterval(boosterInterval);
+}
+    </script>
+    <script>
+      function buyBooster() {
+  const boosterCost = 10;
+
+  if (coins >= boosterCost) {
+    coins -= boosterCost;
+    coinCounter.innerText = coins;
+    db.ref("coins").set(coins);
+
+    const boosterInterval = activateBooster();
+
+    setTimeout(() => {
+      deactivateBooster(boosterInterval);
+    }, 60000); // 1 минута
+  }
+}
+    </script>
+    <script>
+      const buyBoosterButton = document.getElementById("buy-booster");
+
+buyBoosterButton.addEventListener("click", buyBooster);
+    </script>
+</body>
+</html>
